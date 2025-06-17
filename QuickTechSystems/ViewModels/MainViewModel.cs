@@ -4,13 +4,24 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using QuickTechSystems.Application.Events;
-using QuickTechSystems.Helpers;
-using QuickTechSystems.Domain.Enums;
 using QuickTechSystems.Application.DTOs;
 using QuickTechSystems.Application.Services.Interfaces;
 using QuickTechSystems.WPF.Commands;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
+using QuickTechSystems.Commands;
+using QuickTechSystems.ViewModels.Drawer;
+using QuickTechSystems.ViewModels.Customer;
+using QuickTechSystems.ViewModels.Product;
+using QuickTechSystems.ViewModels.Supplier;
+using QuickTechSystems.ViewModels.Settings;
+using QuickTechSystems.ViewModels.Categorie;
+using QuickTechSystems.ViewModels.Employee;
+using QuickTechSystems.ViewModels.Expense;
+using QuickTechSystems.ViewModels.Restaurent;
+using QuickTechSystems.ViewModels.Welcome;
+using QuickTechSystems.ViewModels;
 
 namespace QuickTechSystems.WPF.ViewModels
 {
@@ -21,6 +32,9 @@ namespace QuickTechSystems.WPF.ViewModels
         private readonly UserRole _currentUserRole;
         private readonly EmployeeDTO _currentUser;
         private readonly SemaphoreSlim _operationLock = new SemaphoreSlim(1, 1);
+        private readonly Dictionary<string, Func<ViewModelBase>> _viewModelFactory;
+        private readonly HashSet<string> _permissionRequiredViews;
+        private readonly Dictionary<UserRole, HashSet<string>> _rolePermissions;
 
         private ViewModelBase? _currentViewModel;
         private FlowDirection _currentFlowDirection = FlowDirection.LeftToRight;
@@ -115,6 +129,49 @@ namespace QuickTechSystems.WPF.ViewModels
             _currentUserRole = Enum.Parse<UserRole>(_currentUser.Role);
             Debug.WriteLine($"User logged in as: {_currentUser.Role} (Parsed Role: {_currentUserRole})");
 
+            _viewModelFactory = new Dictionary<string, Func<ViewModelBase>>
+            {
+                ["Welcome"] = () => _serviceProvider.GetRequiredService<WelcomeViewModel>(),
+                ["Transactions"] = () => _serviceProvider.GetRequiredService<WelcomeViewModel>(),
+                ["Categories"] = () => _serviceProvider.GetRequiredService<CategoryViewModel>(),
+                ["Customers"] = () => _serviceProvider.GetRequiredService<CustomerViewModel>(),
+                ["Products"] = () => _serviceProvider.GetRequiredService<ProductViewModel>(),
+                ["Settings"] = () => _serviceProvider.GetRequiredService<SettingsViewModel>(),
+                ["Suppliers"] = () => _serviceProvider.GetRequiredService<SupplierViewModel>(),
+                ["Expenses"] = () => _serviceProvider.GetRequiredService<ExpenseViewModel>(),
+                ["Drawer"] = () => _serviceProvider.GetRequiredService<DrawerViewModel>(),
+                ["Employees"] = () => _serviceProvider.GetRequiredService<EmployeeViewModel>(),
+                ["TableManagement"] = () => _serviceProvider.GetRequiredService<TableManagementViewModel>()
+            };
+
+            _permissionRequiredViews = new HashSet<string>
+            {
+                "Products", "Categories", "Suppliers", "Expenses", "Settings",
+                "Employees", "MonthlySubscriptions", "TransactionHistory",
+                "Profit", "LowStockHistory", "TableManagement"
+            };
+
+            _rolePermissions = new Dictionary<UserRole, HashSet<string>>
+            {
+                [UserRole.Admin] = new HashSet<string>
+                {
+                    "Welcome", "Transactions", "Products", "Categories", "Suppliers",
+                    "Expenses", "Settings", "Employees", "MonthlySubscriptions",
+                    "TransactionHistory", "Profit", "Customers", "Drawer",
+                    "LowStockHistory", "TableManagement"
+                },
+                [UserRole.Manager] = new HashSet<string>
+                {
+                    "Welcome", "Transactions", "Products", "Categories", "Suppliers",
+                    "Expenses", "MonthlySubscriptions", "TransactionHistory",
+                    "Profit", "Customers", "Drawer", "LowStockHistory", "TableManagement"
+                },
+                [UserRole.Cashier] = new HashSet<string>
+                {
+                    "Welcome", "Transactions", "Customers", "Drawer"
+                }
+            };
+
             _eventAggregator.Subscribe<ApplicationModeChangedEvent>(OnApplicationModeChanged);
             Debug.WriteLine("Subscribed to ApplicationModeChangedEvent");
 
@@ -181,44 +238,25 @@ namespace QuickTechSystems.WPF.ViewModels
         {
             return _currentUserRole switch
             {
-                UserRole.Admin => "Dashboard",
-                UserRole.Manager => "Dashboard",
-                UserRole.Cashier => "Transactions",
-                _ => "Transactions"
+                UserRole.Cashier => "Welcome",
+                _ => "Welcome"
             };
         }
 
         private bool CanExecuteNavigation(object? parameter)
         {
-            if (_currentUserRole == UserRole.Admin)
-                return true;
-
             if (parameter is not string destination || !IsNavigationEnabled)
                 return false;
 
             if ((DateTime.Now - _lastNavigationTime).TotalMilliseconds < NAVIGATION_COOLDOWN_MS)
                 return false;
 
-            return destination switch
-            {
-                "Dashboard" => IsManager,
-                "Transactions" => true,
-                "Products" => IsManager,
-                "Categories" => IsManager,
-                "Suppliers" => IsManager,
-                "Expenses" => IsManager,
-                "Settings" => IsAdmin,
-                "Employees" => IsAdmin,
-                "MonthlySubscriptions" => IsManager,
-                "Quotes" => false,
-                "Drawer" => true,
-                "TransactionHistory" => IsManager,
-                "Profit" => IsManager,
-                "Customers" => true,
-                "LowStockHistory" => IsManager,
-                "TableManagement" => IsManager || IsAdmin || IsRestaurantMode,
-                _ => false
-            };
+            if (_currentUserRole == UserRole.Admin)
+                return _viewModelFactory.ContainsKey(destination);
+
+            return _rolePermissions.ContainsKey(_currentUserRole) &&
+                   _rolePermissions[_currentUserRole].Contains(destination) &&
+                   _viewModelFactory.ContainsKey(destination);
         }
 
         private async void ExecuteNavigation(object? parameter)
@@ -254,25 +292,18 @@ namespace QuickTechSystems.WPF.ViewModels
 
                 try
                 {
-                    CurrentViewModel = destination switch
+                    if (_viewModelFactory.TryGetValue(destination, out var factory))
                     {
-                        "Dashboard" => _serviceProvider.GetRequiredService<DashboardViewModel>(),
-                        "Categories" => _serviceProvider.GetRequiredService<CategoryViewModel>(),
-                        "Customers" => _serviceProvider.GetRequiredService<CustomerViewModel>(),
-                        "Products" => _serviceProvider.GetRequiredService<ProductViewModel>(),
-                        "Settings" => _serviceProvider.GetRequiredService<SettingsViewModel>(),
-                        "Suppliers" => _serviceProvider.GetRequiredService<SupplierViewModel>(),
-                        "Expenses" => _serviceProvider.GetRequiredService<ExpenseViewModel>(),
-                        "Drawer" => _serviceProvider.GetRequiredService<DrawerViewModel>(),
-                        "Employees" => _serviceProvider.GetRequiredService<EmployeeViewModel>(),
-                        "TableManagement" => _serviceProvider.GetRequiredService<TableManagementViewModel>(),
-                        "Transactions" => _serviceProvider.GetRequiredService<DashboardViewModel>(),
-                        _ => throw new ArgumentException($"Unknown destination: {destination}")
-                    };
+                        CurrentViewModel = factory();
 
-                    if (CurrentViewModel != null)
+                        if (CurrentViewModel != null)
+                        {
+                            await CurrentViewModel.LoadAsync();
+                        }
+                    }
+                    else
                     {
-                        await CurrentViewModel.LoadAsync();
+                        throw new ArgumentException($"Unknown destination: {destination}");
                     }
                 }
                 catch (Exception ex)

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using QuickTechSystems.Application.Helpers;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using QuickTechSystems.Application.Events;
 
 namespace QuickTechSystems.WPF.Converters
 {

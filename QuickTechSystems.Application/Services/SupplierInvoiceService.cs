@@ -4,10 +4,10 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using QuickTechSystems.Application.DTOs;
 using QuickTechSystems.Application.Events;
-using QuickTechSystems.Application.Interfaces;
+using QuickTechSystems.Application.Mappings;
 using QuickTechSystems.Application.Services.Interfaces;
 using QuickTechSystems.Domain.Entities;
-using QuickTechSystems.Domain.Interfaces.Repositories;
+using QuickTechSystems.Domain.Interfaces;
 
 namespace QuickTechSystems.Application.Services
 {

@@ -1,9 +1,9 @@
 ﻿// QuickTechSystems.Application/Services/BaseService.cs
 using AutoMapper;
 using QuickTechSystems.Application.Events;
-using QuickTechSystems.Application.Interfaces; // Updated this import
+using QuickTechSystems.Application.Mappings;
 using QuickTechSystems.Application.Services.Interfaces;
-using QuickTechSystems.Domain.Interfaces.Repositories;
+using QuickTechSystems.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

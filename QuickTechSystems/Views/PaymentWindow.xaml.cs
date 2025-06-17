@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using QuickTechSystems.WPF.ViewModels;
+using QuickTechSystems.ViewModels.Customer;
 
 namespace QuickTechSystems.WPF.Views
 {

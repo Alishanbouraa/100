@@ -5,26 +5,33 @@ using QuickTechSystems.Application.Events;
 using QuickTechSystems.Application.Mappings;
 using QuickTechSystems.Application.Services;
 using QuickTechSystems.Application.Services.Interfaces;
-using QuickTechSystems.Domain.Interfaces.Repositories;
 using QuickTechSystems.Infrastructure.Data;
-using QuickTechSystems.Infrastructure.Repositories;
 using QuickTechSystems.Infrastructure.Services;
-using QuickTechSystems.ViewModels;
 using QuickTechSystems.Views;
-using QuickTechSystems.WPF.ViewModels;
 using QuickTechSystems.WPF.Views;
 using QuickTechSystems.WPF.Services;
 using System;
 using System.IO;
 using System.Windows;
-using QuickTechSystems.Application.Helpers;
-using QuickTechSystems.Helpers;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using QuickTechSystems.Application.Interfaces;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Markup;
+using QuickTechSystems.Domain.Interfaces;
+using QuickTechSystems.Commands;
+using QuickTechSystems.ViewModels.Drawer;
+using QuickTechSystems.ViewModels.Customer;
+using QuickTechSystems.ViewModels.Login;
+using QuickTechSystems.ViewModels.Product;
+using QuickTechSystems.ViewModels.Supplier;
+using QuickTechSystems.ViewModels.Settings;
+using QuickTechSystems.ViewModels.Categorie;
+using QuickTechSystems.ViewModels.Employee;
+using QuickTechSystems.ViewModels.Expense;
+using QuickTechSystems.ViewModels.Restaurent;
+using QuickTechSystems.ViewModels.Welcome;
+using QuickTechSystems.ViewModels;
 
 namespace QuickTechSystems.WPF
 {
@@ -118,7 +125,6 @@ namespace QuickTechSystems.WPF
 
             services.AddScoped<MainViewModel>();
             services.AddScoped<LoginViewModel>();
-            services.AddScoped<DashboardViewModel>();
             services.AddScoped<CategoryViewModel>();
             services.AddScoped<CustomerViewModel>();
             services.AddScoped<DrawerViewModel>();
@@ -128,6 +134,7 @@ namespace QuickTechSystems.WPF
             services.AddScoped<SettingsViewModel>();
             services.AddScoped<SupplierViewModel>();
             services.AddScoped<SystemPreferencesViewModel>();
+            services.AddScoped<WelcomeViewModel>();
             services.AddTransient<SupplierInvoiceViewModel>();
 
             services.AddTransient<MainWindow>();
@@ -141,8 +148,8 @@ namespace QuickTechSystems.WPF
             services.AddTransient<SettingsView>();
             services.AddTransient<SupplierView>();
             services.AddTransient<SystemPreferencesView>();
+            services.AddTransient<QuickTechSystems.WPF.Views.WelcomeView>();
 
-            services.AddTransient<QuantityDialog>();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

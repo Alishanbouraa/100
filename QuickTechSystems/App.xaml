@@ -3,6 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:QuickTechSystems.WPF.Converters"
              xmlns:vm="clr-namespace:QuickTechSystems.WPF.ViewModels"
+             xmlns:categoryVm="clr-namespace:QuickTechSystems.ViewModels.Categorie"
+             xmlns:customerVm="clr-namespace:QuickTechSystems.ViewModels.Customer"
+             xmlns:productVm="clr-namespace:QuickTechSystems.ViewModels.Product"
+             xmlns:settingsVm="clr-namespace:QuickTechSystems.ViewModels.Settings"
+             xmlns:supplierVm="clr-namespace:QuickTechSystems.ViewModels.Supplier"
+             xmlns:expenseVm="clr-namespace:QuickTechSystems.ViewModels.Expense"
+             xmlns:drawerVm="clr-namespace:QuickTechSystems.ViewModels.Drawer"
+             xmlns:employeeVm="clr-namespace:QuickTechSystems.ViewModels.Employee"
+             xmlns:restaurantVm="clr-namespace:QuickTechSystems.ViewModels.Restaurent"
+             xmlns:welcomeVm="clr-namespace:QuickTechSystems.ViewModels.Welcome"
              xmlns:views="clr-namespace:QuickTechSystems.WPF.Views">
     <Application.Resources>
         <ResourceDictionary>
@@ -55,7 +65,6 @@
             <converters:PaymentButtonVisibilityConverter x:Key="PaymentButtonVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:MultiValueStockToBoxesConverter x:Key="MultiValueStockToBoxesConverter"/>
-            <converters:ProductCostMultiConverter x:Key="ProductCostMultiConverter"/>
 
             <Style x:Key="CardBorderStyle" TargetType="Border">
                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
@@ -224,38 +233,35 @@
                 <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
             </Style>
 
-            <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
-                <views:DashboardView/>
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type vm:CategoryViewModel}">
+            <DataTemplate DataType="{x:Type categoryVm:CategoryViewModel}">
                 <views:CategoryView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:CustomerViewModel}">
+            <DataTemplate DataType="{x:Type customerVm:CustomerViewModel}">
                 <views:CustomerView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:ProductViewModel}">
+            <DataTemplate DataType="{x:Type productVm:ProductViewModel}">
                 <views:ProductView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <DataTemplate DataType="{x:Type settingsVm:SettingsViewModel}">
                 <views:SettingsView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:SupplierViewModel}">
+            <DataTemplate DataType="{x:Type supplierVm:SupplierViewModel}">
                 <views:SupplierView/>
             </DataTemplate>
-
-            <DataTemplate DataType="{x:Type vm:ExpenseViewModel}">
+            <DataTemplate DataType="{x:Type expenseVm:ExpenseViewModel}">
                 <views:ExpenseView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:DrawerViewModel}">
+            <DataTemplate DataType="{x:Type drawerVm:DrawerViewModel}">
                 <views:DrawerView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:EmployeeViewModel}">
+            <DataTemplate DataType="{x:Type employeeVm:EmployeeViewModel}">
                 <views:EmployeeView/>
             </DataTemplate>
-
-            <DataTemplate DataType="{x:Type vm:TableManagementViewModel}">
+            <DataTemplate DataType="{x:Type restaurantVm:TableManagementViewModel}">
                 <views:TableManagementView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type welcomeVm:WelcomeViewModel}">
+                <views:WelcomeView/>
             </DataTemplate>
 
         </ResourceDictionary>

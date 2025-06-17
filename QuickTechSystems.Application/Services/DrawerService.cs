@@ -10,8 +10,8 @@ using QuickTechSystems.Application.Events;
 using QuickTechSystems.Application.Services;
 using QuickTechSystems.Application.Services.Interfaces;
 using QuickTechSystems.Domain.Entities;
-using QuickTechSystems.Domain.Interfaces.Repositories;
-using QuickTechSystems.Application.Interfaces;
+using QuickTechSystems.Domain.Interfaces;
+using QuickTechSystems.Application.Mappings;
 
 namespace QuickTechSystems.Infrastructure.Services
 {

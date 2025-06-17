@@ -1,6 +1,4 @@
-﻿using QuickTechSystems.Domain.Enums;
-
-namespace QuickTechSystems.Domain.Entities
+﻿namespace QuickTechSystems.Domain.Entities
 {
     public class Transaction
     {

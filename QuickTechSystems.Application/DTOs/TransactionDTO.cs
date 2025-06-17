@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using QuickTechSystems.Domain.Enums;
+using QuickTechSystems.Domain.Entities;
 
 namespace QuickTechSystems.Application.DTOs
 {

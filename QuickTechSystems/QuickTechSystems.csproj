@@ -86,8 +86,6 @@
 			<CustomContentFiles Include="appsettings.json" />
 			<CustomContentFiles Include="Resources\**\*" />
 		</ItemGroup>
-		<Copy SourceFiles="@(CustomContentFiles)"
-		      DestinationFiles="@(CustomContentFiles->'$(PublishDir)%(Identity)')"
-		      SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(CustomContentFiles)" DestinationFiles="@(CustomContentFiles->'$(PublishDir)%(Identity)')" SkipUnchangedFiles="true" />
 	</Target>
 </Project>

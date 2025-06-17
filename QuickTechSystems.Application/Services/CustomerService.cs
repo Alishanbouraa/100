@@ -3,10 +3,10 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using QuickTechSystems.Application.DTOs;
 using QuickTechSystems.Application.Events;
-using QuickTechSystems.Application.Interfaces;
+using QuickTechSystems.Application.Mappings;
 using QuickTechSystems.Application.Services.Interfaces;
 using QuickTechSystems.Domain.Entities;
-using QuickTechSystems.Domain.Interfaces.Repositories;
+using QuickTechSystems.Domain.Interfaces;
 
 namespace QuickTechSystems.Application.Services
 {
@@ -79,7 +79,7 @@ namespace QuickTechSystems.Application.Services
                             customer.UpdatedAt = DateTime.Now;
                             await _repository.UpdateAsync(customer);
                             await _unitOfWork.SaveChangesAsync();
-                            await _unitOfWork.Transactions.AddAsync(new Transaction { CustomerId = customerId, CustomerName = customer.Name, TotalAmount = amount, PaidAmount = amount, TransactionDate = DateTime.Now, TransactionType = Domain.Enums.TransactionType.Adjustment, Status = Domain.Enums.TransactionStatus.Completed, PaymentMethod = "Cash", CashierId = "System", CashierName = "Debt Payment" });
+                            await _unitOfWork.Transactions.AddAsync(new Transaction { CustomerId = customerId, CustomerName = customer.Name, TotalAmount = amount, PaidAmount = amount, TransactionDate = DateTime.Now, TransactionType = TransactionType.Adjustment, Status = TransactionStatus.Completed, PaymentMethod = "Cash", CashierId = "System", CashierName = "Debt Payment" });
                             await _unitOfWork.SaveChangesAsync();
                             if (_drawerService != null) await _drawerService.ProcessCashReceiptAsync(amount, $"Debt payment from: {customer.Name}, Ref: {reference}");
                             await transaction.CommitAsync();

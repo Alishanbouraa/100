@@ -11,7 +11,7 @@ using QuickTechSystems.Application.Events;
 using Microsoft.EntityFrameworkCore;
 using QuickTechSystems.Infrastructure.Data;
 using QuickTechSystems.Infrastructure.Services;
-using QuickTechSystems.Application.Interfaces;
+using QuickTechSystems.Application.Mappings;
 
 namespace QuickTechSystems.WPF.ViewModels
 {

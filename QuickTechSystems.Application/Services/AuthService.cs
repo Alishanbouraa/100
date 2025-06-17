@@ -6,7 +6,7 @@ using QuickTechSystems.Application.DTOs;
 using QuickTechSystems.Application.Services.Interfaces;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using QuickTechSystems.Application.Interfaces;
+using QuickTechSystems.Application.Mappings;
 
 namespace QuickTechSystems.Application.Services
 {

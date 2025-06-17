@@ -3,12 +3,12 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using QuickTechSystems.Application.DTOs;
 using QuickTechSystems.Application.Events;
-using QuickTechSystems.Application.Interfaces;
 using QuickTechSystems.Application.Services.Interfaces;
 using QuickTechSystems.Domain.Entities;
-using QuickTechSystems.Domain.Interfaces.Repositories;
 using System.Security.Cryptography;
 using System.Text;
+using QuickTechSystems.Domain.Interfaces;
+using QuickTechSystems.Application.Mappings;
 
 namespace QuickTechSystems.Application.Services
 {

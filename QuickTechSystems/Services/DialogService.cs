@@ -49,37 +49,7 @@ namespace QuickTechSystems.WPF.Services
             return await taskCompletionSource.Task;
         }
 
-        public static async Task<decimal?> ShowQuantityDialog(Window owner, string productName, decimal initialQuantity = 1)
-        {
-            return await System.Windows.Application.Current.Dispatcher.InvokeAsync<decimal?>(() =>
-            {
-                try
-                {
-                    var dialog = new QuantityDialog(productName, initialQuantity)
-                    {
-                        Owner = owner,
-                        WindowStartupLocation = WindowStartupLocation.CenterOwner
-                    };
-
-                    if (dialog.ShowDialog() == true)
-                    {
-                        return dialog.NewQuantity;
-                    }
-                    return null;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error showing quantity dialog: {ex.Message}");
-                    MessageBox.Show(
-                        owner,
-                        "An error occurred showing the quantity dialog. Please try again.",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    return null;
-                }
-            });
-        }
+    
 
         public async Task<(bool Confirmed, string Value)> ShowTextInputDialogAsync(string title, string prompt, Window owner = null)
         {
